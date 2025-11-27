@@ -12,7 +12,6 @@ import (
 	"strings"
 
 	"github.com/bootdotdev/learn-file-storage-s3-golang-starter/internal/auth"
-	"github.com/bootdotdev/learn-file-storage-s3-golang-starter/internal/database"
 	"github.com/google/uuid"
 )
 
@@ -104,18 +103,5 @@ func (cfg *apiConfig) handlerUploadThumbnail(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	videoParams := database.CreateVideoParams{
-		Title:       video.Title,
-		Description: video.Description,
-		UserID:      video.UserID,
-	}
-
-	respondWithJSON(w, http.StatusOK, database.Video{
-		ID:                video.ID,
-		CreatedAt:         video.CreatedAt,
-		UpdatedAt:         video.UpdatedAt,
-		ThumbnailURL:      &thumbnailURL,
-		VideoURL:          video.VideoURL,
-		CreateVideoParams: videoParams,
-	})
+	respondWithJSON(w, http.StatusOK, video)
 }
