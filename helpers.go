@@ -2,13 +2,9 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"os/exec"
-	"time"
-
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 func getVideoAspectRatio(filepath string) (string, error) {
@@ -58,18 +54,4 @@ func processVideoForFastStart(filepath string) (string, error) {
 	}
 
 	return outputFilePath, nil
-}
-
-func generatePresignedURL(s3Client *s3.Client, bucket, key string, expireTime time.Duration) (string, error) {
-	presignedClient := s3.NewPresignClient(s3Client)
-	params := s3.GetObjectInput{
-		Bucket: &bucket,
-		Key:    &key,
-	}
-	presignedHTTPRequest, err := presignedClient.PresignGetObject(context.TODO(), &params, s3.WithPresignExpires(expireTime))
-	if err != nil {
-		return "", err
-	}
-
-	return presignedHTTPRequest.URL, nil
 }
